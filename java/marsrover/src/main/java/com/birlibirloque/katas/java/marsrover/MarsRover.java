@@ -2,15 +2,16 @@ package com.birlibirloque.katas.java.marsrover;
 
 public class MarsRover 
 {
-	private Possition possition = new Possition(50, 50);
+	private Possition possition = null;
 	private Direction direction = Direction.North;
 
 	public MarsRover() {
+		this.possition = new Possition(50, 50);
 	}
 
 	public MarsRover(int x, int y, String ad) {
-		possition.startAt(x, y);
-		direction = Direction.valueOf(ad);
+		this.possition = new Possition(x, y);
+		this.direction = Direction.valueOf(ad);
 	}
 
 	public boolean areYouAt (int x, int y, String ad) {
@@ -20,9 +21,9 @@ public class MarsRover
 	public void command (String commands) {
 		for (int i = 0; i < commands.length(); i++) {
 			if (commands.charAt(i) == 'f')
-				this.possition.fordward(this.direction);
+				this.possition.moveStepsByDirection(1,this.direction);
 			else if (commands.charAt(i) == 'b')
-				this.possition.backward(this.direction);
+				this.possition.moveStepsByDirection(-1,this.direction);
 			else if (commands.charAt(i) == 'r')
 				direction = direction.turnRight();
 			else if (commands.charAt(i) == 'l')

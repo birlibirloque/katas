@@ -10,45 +10,22 @@ public class Possition {
 		this.y = y;
 	}
 
-	public void fordward (Direction direction) {
+	public void moveStepsByDirection (int steps, Direction direction) {
 		if (direction.areYouFacing(Direction.North)) {
-			y = ++y;
+			y += steps;
 		}
 
 		else if (direction.areYouFacing(Direction.South)) {
-			y = --y;
+			y -= steps;
 		}
 
 		else if (direction.areYouFacing(Direction.East)) {
-			x = ++x;
+			x += steps;
 		}
 
 		else if (direction.areYouFacing(Direction.West)) {
-			x = --x;
+			x -= steps;
 		}		
-	}
-
-	public void backward (Direction direction) {
-		if (direction.areYouFacing(Direction.North)) {
-			y = --y;
-		}
-
-		else if (direction.areYouFacing(Direction.South)) {
-			y = ++y;
-		}
-
-		else if (direction.areYouFacing(Direction.East)) {
-			x = --x;
-		}
-
-		else if (direction.areYouFacing(Direction.West)) {
-			x = ++x;
-		}
-	}
-
-	public void startAt(int x, int y) {
-		this.x = x;
-		this.y = y;
 	}
 
 	public boolean areAt(int x, int y) {
