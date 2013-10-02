@@ -9,6 +9,7 @@
 .classpath
 .project
 .settings
+.metadata
 
 # Sublime Files #
 *.sublime-project
