@@ -6,16 +6,15 @@ def suma (string):
 	return (sumaConDelimitador(delim,sumandos))
 
 def dameDelimitadorYSumandos(string):
-	delim = ','
-	sumandos = string
-	if string[:3] == '//[':
-		aux = string[3:].split(']\n', 1)
-		sumandos = aux.pop()
-		delim = aux.pop()
-	elif string[:2] == '//':
-		delim = string[2]
-		sumandos = string[3:]		
+	if (not tieneDelimitadores(string)):
+		return ',', string.translate({ord('\n'):''})
+
+	delim = string.split('\n')[0].translate({ord(i):None for i in '/[]'}) 
+	sumandos = string.split('\n')[1]
 	return delim, sumandos
+
+def tieneDelimitadores(string):
+	return string[:2] == '//'
 
 def chequeaSumandos(delim, sumandos):
 	negativos = []
