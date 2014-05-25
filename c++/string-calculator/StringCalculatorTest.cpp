@@ -36,4 +36,21 @@ TEST_F(StringCalculatorTest, addStringWithDelimiters) {
 TEST_F(StringCalculatorTest, addStringWithDelimitersAndNewLine) {
 	ASSERT_TRUE(stringCalculator.add("//%\n1%2%\n3") == 6);
 }
+
+TEST_F(StringCalculatorTest, addStringWithNegative) {
+	ASSERT_THROW(stringCalculator.add("//;\n1;2;-3"),NegativeNumbersException);
+}
+
+TEST_F(StringCalculatorTest, addStringNegativeExceptionMessage) {
+	try
+	{
+		stringCalculator.add("//;\n1;2;-3;-4;5;-6");
+		ASSERT_TRUE(false);		
+	}
+	catch (NegativeNumbersException &e) 
+	{
+		ASSERT_STREQ("negativos no soportados: -3 -4 -6", e.what());
+	}
+}
+
 }
