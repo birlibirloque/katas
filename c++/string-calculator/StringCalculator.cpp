@@ -5,9 +5,15 @@
 #include <numeric>
 #include "StringCalculator.h"
 
+bool isBigger(int i)
+{
+	return (i > 1000);
+}
+
+
+
 StringCalculator::StringCalculator()
 {
-	count = 0;
 }
 
 int StringCalculator::add (string str)
@@ -22,18 +28,37 @@ int StringCalculator::add (string str)
 
 vector<int> StringCalculator::giveMeAddend (string str)
 {
-	char delimiter = ',';
-	if (str.find("//") != std::string::npos) {
-		str.erase (remove(str.begin(), str.end(), '/'), str.end());
-		int f = str.find('\n');
-		delimiter = str.at(f-1);
-		str = str.substr(f,str.length());
-	}
-	string straddend = replaceDelimiterBySpaces(str,delimiter);
-	istringstream buf(straddend);
-	vector<int> addend = vector<int>(istream_iterator<int>(buf), istream_iterator<int>());
+	char delimiter = giveMeDelimiter(str);
+	string straddend = giveMeStringAddend(str);
+	straddend = replaceDelimiterBySpaces(straddend,delimiter);
+	vector<int> addend = convertStringToVectorInt (straddend);
+	addend = eraseBigNumbers(addend);
 	checkAddend(addend);
 	return 	addend;
+}
+
+char StringCalculator::giveMeDelimiter (string str)
+{
+	char delimiter = ',';
+	if (hasDelimiter(str)) {
+		delimiter = str.at(str.find('\n') - 1);
+	}
+	return delimiter;
+}
+
+string StringCalculator::giveMeStringAddend (string str)
+{
+	string result = str;
+	if (hasDelimiter(str)) {
+		str.erase (remove(str.begin(), str.end(), '/'), str.end());
+		result = str.substr(str.find('\n'), str.length());
+	}
+	return (result);
+}
+
+bool StringCalculator::hasDelimiter (string str)
+{
+	return str.find("//") != std::string::npos;
 }
 
 string StringCalculator::replaceDelimiterBySpaces (string str, char delimiter)
@@ -42,20 +67,32 @@ string StringCalculator::replaceDelimiterBySpaces (string str, char delimiter)
 	return str;
 }
 
-void StringCalculator::checkAddend (vector<int> addend)
+vector<int> StringCalculator::convertStringToVectorInt (string str)
 {
-	string negativeNumbers = "";
-	for (int i = 0; i < addend.size(); ++i)
+	istringstream buf(str);
+	return vector<int>(istream_iterator<int>(buf), istream_iterator<int>());
+}
+
+vector<int> StringCalculator::eraseBigNumbers (vector<int> v)
+{
+	v.erase(std::remove_if(v.begin(),v.end(),isBigger), v.end()); 
+	return v;
+}
+
+void StringCalculator::checkAddend (vector<int> v)
+{
+	bool throwit = false;
+	string message = string("negativos no soportados:");
+	for (int i = 0; i < v.size(); ++i)
 	{
-		if (addend.at(i) < 0)
+		if (v.at(i) < 0)
 		{
-			negativeNumbers += " ";
-			negativeNumbers += std::to_string(static_cast<long long>(addend.at(i)));
+			message += " " + std::to_string(static_cast<long long>(v.at(i)));
+			throwit = true;
 		}
 	}
-	if (negativeNumbers.size() > 0)
+	if (throwit)
 	{
-		string message = string("negativos no soportados:") + negativeNumbers;
 		throw NegativeNumbersException(message);
 	}
 }

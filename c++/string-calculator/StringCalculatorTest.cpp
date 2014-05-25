@@ -53,4 +53,8 @@ TEST_F(StringCalculatorTest, addStringNegativeExceptionMessage) {
 	}
 }
 
+TEST_F(StringCalculatorTest, addStringWithBiggerNumbers) {
+	ASSERT_TRUE(stringCalculator.add("//;\n1;2;1001") == 3);
+}
+
 }
